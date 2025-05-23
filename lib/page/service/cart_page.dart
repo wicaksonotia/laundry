@@ -59,9 +59,15 @@ class _CartPageState extends State<CartPage> {
               )
             else
               Expanded(
-                child: ListView.builder(
+                child: ListView.separated(
                   controller: scrollController,
                   itemCount: cartController.cartList.length,
+                  separatorBuilder:
+                      (context, index) => Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: Colors.grey.shade300,
+                      ),
                   itemBuilder: (context, index) {
                     final cart = cartController.cartList[index];
                     return Slidable(
@@ -92,18 +98,22 @@ class _CartPageState extends State<CartPage> {
                           style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: MySizes.fontSizeLg,
+                            fontSize: MySizes.fontSizeMd,
                           ),
                         ),
                         subtitle: Text(
                           'total Harga : Rp ${CurrencyFormat.convertToIdr(cart.serviceModel.price! * cart.quantity, 0)}',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: MySizes.fontSizeSm,
+                          ),
                         ),
                         trailing: Text(
-                          cart.quantity.toString(),
+                          "${cart.quantity} ${cart.serviceModel.satuan!}",
                           style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: MySizes.fontSizeLg,
+                            fontSize: MySizes.fontSizeMd,
                           ),
                         ),
                       ),

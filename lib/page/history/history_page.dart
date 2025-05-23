@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:laundry/drawer/nav_drawer.dart' as custom_drawer;
+import 'package:laundry/utils/colors.dart';
+import 'package:laundry/utils/sizes.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -14,10 +16,14 @@ class _HistoryPageState extends State<HistoryPage> {
     return Scaffold(
       drawer: custom_drawer.NavigationDrawer(),
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text('History Page'),
-        centerTitle: true,
-        backgroundColor: Colors.blue,
+        title: const Text(
+          'History Page',
+          style: TextStyle(
+            fontSize: MySizes.fontSizeLg,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
       ),
       body: Center(child: const Text('History Page Content')),
     );
