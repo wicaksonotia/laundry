@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:laundry/routes.dart';
 import 'package:laundry/utils/colors.dart';
+import 'package:laundry/utils/sizes.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({super.key});
@@ -15,7 +16,6 @@ class NavigationDrawer extends StatelessWidget {
         child: ListView(
           children: [
             buildDrawerHeader(),
-            Gap(20),
             buildDrawerItem(
               icon: Icons.photo,
               text: "Services",
@@ -84,6 +84,11 @@ class NavigationDrawer extends StatelessWidget {
       leading: Icon(icon, color: textIconColor),
       title: Text(text, style: TextStyle(color: textIconColor)),
       tileColor: tileColor,
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        color: textIconColor,
+        size: MySizes.iconXs,
+      ),
       onTap: onTap,
     );
   }

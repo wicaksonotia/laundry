@@ -106,15 +106,15 @@ class RemoteDataSource {
 
   // SAVE TRANSACTION
   static Future<bool> saveDetailTransaction(List<dynamic> data) async {
-    // String jsonData = jsonEncode(data);
     try {
+      var rawFormat = jsonEncode(data);
       Dio dio = Dio();
       var url =
           ApiEndPoints.baseUrl +
           ApiEndPoints.authEndpoints.saveDetailTransaction;
       Response response = await dio.post(
         url,
-        data: jsonEncode(data),
+        data: rawFormat,
         options: Options(contentType: Headers.jsonContentType),
       );
       if (response.statusCode == 200) {

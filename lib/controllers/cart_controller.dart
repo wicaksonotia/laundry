@@ -183,21 +183,24 @@ class CartController extends GetxController {
   void saveCart(discount) async {
     try {
       isLoading(true);
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      // final SharedPreferences prefs = await SharedPreferences.getInstance();
+      var kios = 'laundry-stg';
       var payload =
           cartList.map((cartItem) {
             return {
               'id_service': cartItem.id,
-              'product_name': cartItem.serviceModel.serviceName.toString(),
+              'service_name': cartItem.serviceModel.serviceName.toString(),
               'quantity': cartItem.quantity,
               'unit_price': cartItem.serviceModel.price,
-              'kios': prefs.getString('username'),
+              // 'kios': prefs.getString('username'),
+              'kios': kios,
             };
           }).toList();
       var resultSave = await RemoteDataSource.saveDetailTransaction(payload);
       if (resultSave) {
         await RemoteDataSource.saveTransaction(
-          prefs.getString('username')!,
+          // prefs.getString('username')!,
+          kios,
           discount,
         );
         // NOTIF SAVE SUCCESS
@@ -208,10 +211,10 @@ class CartController extends GetxController {
           snackPosition: SnackPosition.TOP,
         );
         // PRINT TRANSACTION
-        _printNotaController.printTransaction(
-          int.parse(prefs.getString('numerator')!),
-          prefs.getString('username')!,
-        );
+        // _printNotaController.printTransaction(
+        //   int.parse(prefs.getString('numerator')!),
+        //   prefs.getString('username')!,
+        // );
         // CLEAR TRANSACTION
         cartList.clear();
         totalAllQuantity = 0.obs;
