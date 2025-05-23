@@ -1,2 +1,3 @@
 # laundry
-flutter, getx, dio, postgresql
+
+A new Flutter project.
