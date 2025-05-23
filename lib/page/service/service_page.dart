@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:laundry/controllers/login_controller.dart';
+// import 'package:laundry/controllers/login_controller.dart';
 import 'package:laundry/controllers/service_controller.dart';
 import 'package:laundry/page/service/category_menu.dart';
 import 'package:laundry/page/service/footer.dart';
 import 'package:laundry/page/service/service_list_view.dart';
 import 'package:laundry/utils/box_container.dart';
 import 'package:laundry/utils/colors.dart';
+import 'package:laundry/drawer/nav_drawer.dart' as custom_drawer;
 
 class ServicePage extends StatefulWidget {
   const ServicePage({super.key});
@@ -22,6 +23,7 @@ class _ServicePageState extends State<ServicePage> {
     // final LoginController loginController = Get.find<LoginController>();
 
     return Scaffold(
+      drawer: custom_drawer.NavigationDrawer(),
       backgroundColor: MyColors.notionBgGrey,
       bottomNavigationBar: const FooterService(),
       body: RefreshIndicator(
@@ -31,52 +33,16 @@ class _ServicePageState extends State<ServicePage> {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              actions: [
-                PopupMenuButton(
-                  color: Colors.white,
-                  icon: const Icon(Icons.more_vert, color: MyColors.primary),
-                  onSelected: (dynamic value) {},
-                  itemBuilder:
-                      (BuildContext context) => <PopupMenuEntry>[
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: const Icon(Icons.edit_document),
-                            title: const Text('Report'),
-                            onTap: () {
-                              Get.back();
-                              Get.toNamed('/reporttransaction');
-                            },
-                          ),
-                        ),
-                        const PopupMenuDivider(),
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: const Icon(Icons.bluetooth_searching),
-                            title: const Text('Setting Bluetooth'),
-                            onTap: () {
-                              Get.back();
-                              Get.toNamed('/bluetooth_setting');
-                            },
-                          ),
-                        ),
-                        const PopupMenuItem(
-                          child: ListTile(
-                            leading: Icon(Icons.settings),
-                            title: Text('Settings'),
-                          ),
-                        ),
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: const Icon(Icons.logout),
-                            title: const Text('Logout'),
-                            onTap: () {
-                              // loginController.logout();
-                            },
-                          ),
-                        ),
-                      ],
-                ),
-              ],
+              leading: Builder(
+                builder: (context) {
+                  return IconButton(
+                    icon: const Icon(Icons.menu, color: Colors.white),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  );
+                },
+              ),
               backgroundColor: MyColors.primary,
               flexibleSpace: const FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,

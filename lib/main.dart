@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       defaultTransition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 500),
       debugShowCheckedModeBanner: false,
-      initialRoute: RouterClass.servicepage,
+      initialRoute: RouterClass.servicePage,
     );
   }
 }
