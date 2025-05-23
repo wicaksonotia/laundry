@@ -1,0 +1,34 @@
+name: laundry
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  badges: ^3.1.2
+  chips_choice: ^3.0.1
+  cupertino_icons: ^1.0.8
+  currency_text_input_formatter: ^2.3.0
+  dio: ^5.8.0+1
+  flutter:
+    sdk: flutter
+  flutter_esc_pos_utils: ^1.0.1
+  flutter_slidable: ^4.0.0
+  gap: ^3.0.1
+  get: ^4.7.2
+  intl: ^0.20.2
+  print_bluetooth_thermal: ^1.1.6
+  shared_preferences: ^2.5.3
+  shimmer: ^3.0.0
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
