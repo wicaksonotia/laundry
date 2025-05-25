@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:laundry/controllers/cart_controller.dart';
 import 'package:laundry/controllers/category_controller.dart';
+import 'package:laundry/controllers/history_controller.dart';
 import 'package:laundry/controllers/login_controller.dart';
 import 'package:laundry/controllers/service_controller.dart';
 
@@ -11,6 +12,7 @@ class InitialBinding implements Bindings {
     Get.put<ServiceController>(ServiceController());
     Get.put<CategoryController>(CategoryController());
     Get.put<CartController>(CartController());
+    Get.put<HistoryController>(HistoryController());
     // Get.lazyPut<CategoryController>(() => CategoryController());
     // Get.lazyPut<ServiceController>(() => ServiceController());
     // Get.lazyPut<CartController>(() => CartController());

@@ -33,7 +33,7 @@ class RemoteDataSource {
     }
   }
 
-  // CATEGORIES
+  // GET CATEGORIES
   static Future<List<CategoryModel>?> getCategories() async {
     try {
       var url = ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.categories;
@@ -48,7 +48,7 @@ class RemoteDataSource {
     }
   }
 
-  // SERVICES
+  // GET SERVICES
   static Future<List<ServiceModel>?> getServices(String id) async {
     try {
       var url = ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.services;
@@ -64,7 +64,56 @@ class RemoteDataSource {
     }
   }
 
-  // GET LIST TRANSACTION DETAILS BY NUMERATOR AND KIOS
+  // GET ROW TRANSACTION BY NUMERATOR AND KIOS
+  static Future<TransactionModel?> getRowTransactionDetails(
+    int numerator,
+    String kios,
+  ) async {
+    try {
+      var url =
+          ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.getRowTransaction;
+      final response = await Dio().get('$url?numerator=$numerator&kios=$kios');
+      if (response.statusCode == 200) {
+        dynamic jsonData = response.data;
+        return TransactionModel.fromJson(jsonData);
+      }
+      return null;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  // GET LIST TRANSACTION
+  static Future<List<TransactionModel>?> getListTransactions(
+    DateTime startdate,
+    DateTime enddate,
+  ) async {
+    try {
+      // final SharedPreferences prefs = await SharedPreferences.getInstance();
+      var rawFormat = (jsonEncode({
+        'startdate': startdate.toString(),
+        'enddate': enddate.toString(),
+        // 'kios': prefs.getString('username'),
+        'kios': 'laundry-stg',
+      }));
+      var url =
+          ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.getListTransaction;
+      Response response = await Dio().post(
+        url,
+        data: rawFormat,
+        options: Options(contentType: Headers.jsonContentType),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = response.data;
+        return jsonData.map((e) => TransactionModel.fromJson(e)).toList();
+      }
+      return null;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  // GET LIST TRANSACTION DETAIL BY NUMERATOR AND KIOS
   static Future<List<TransactionDetailModel>?> getListTransactionDetails(
     int numerator,
     String kios,
@@ -72,7 +121,7 @@ class RemoteDataSource {
     try {
       var url =
           ApiEndPoints.baseUrl +
-          ApiEndPoints.authEndpoints.getTransactionDetails;
+          ApiEndPoints.authEndpoints.getListTransactionDetail;
       final response = await Dio().get('$url?numerator=$numerator&kios=$kios');
       if (response.statusCode == 200) {
         List<dynamic> jsonData = response.data;
@@ -85,26 +134,7 @@ class RemoteDataSource {
     }
   }
 
-  // GET TRANSACTION DETAIL BY NUMERATOR AND KIOS
-  static Future<TransactionModel?> getRowTransactionDetails(
-    int numerator,
-    String kios,
-  ) async {
-    try {
-      var url =
-          ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.getRowTransactions;
-      final response = await Dio().get('$url?numerator=$numerator&kios=$kios');
-      if (response.statusCode == 200) {
-        dynamic jsonData = response.data;
-        return TransactionModel.fromJson(jsonData);
-      }
-      return null;
-    } catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  // SAVE TRANSACTION
+  // SAVE DETAIL TRANSACTION
   static Future<bool> saveDetailTransaction(List<dynamic> data) async {
     try {
       var rawFormat = jsonEncode(data);
@@ -131,6 +161,7 @@ class RemoteDataSource {
     }
   }
 
+  // SAVE TRANSACTION
   static Future<bool> saveTransaction(Map<String, dynamic> data) async {
     try {
       var rawFormat = jsonEncode(data);

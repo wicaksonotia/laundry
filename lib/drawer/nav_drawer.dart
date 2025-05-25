@@ -17,7 +17,7 @@ class NavigationDrawer extends StatelessWidget {
             buildDrawerHeader(),
             buildDrawerItem(
               icon: Icons.photo,
-              text: "Services",
+              text: "Layanan",
               onTap: () => Get.toNamed(RouterClass.servicePage),
               tileColor: Colors.black,
               textIconColor:
@@ -27,7 +27,7 @@ class NavigationDrawer extends StatelessWidget {
             ),
             buildDrawerItem(
               icon: Icons.video_call,
-              text: "Histories",
+              text: "Riwayat Transaksi",
               onTap: () => Get.toNamed(RouterClass.historyPage),
               tileColor: Colors.black,
               textIconColor:
