@@ -1,8 +1,8 @@
 import 'package:laundry/controllers/cart_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:laundry/page/service/empty_cart.dart';
 import 'package:laundry/utils/currency.dart';
 import 'package:laundry/utils/sizes.dart';
 
@@ -33,30 +33,7 @@ class _CartPageState extends State<CartPage> {
         return Column(
           children: [
             if (cartController.cartList.isEmpty)
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/empty_cart.png', height: 100),
-                    const Gap(16),
-                    const Text(
-                      'Your cart is empty',
-                      style: TextStyle(
-                        fontSize: MySizes.fontSizeXl,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const Gap(16),
-                    const Text(
-                      'Looks like you haven\'t add any item to your cart yet!',
-                      style: TextStyle(
-                        fontSize: MySizes.fontSizeMd,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              )
+              const EmptyCart()
             else
               Expanded(
                 child: ListView.separated(
@@ -81,7 +58,11 @@ class _CartPageState extends State<CartPage> {
                               setState(() {
                                 cartController.removeProduct(cart.serviceModel);
                                 if (cartController.cartList.isEmpty) {
-                                  Navigator.pop(context);
+                                  Future.delayed(
+                                    const Duration(seconds: 1),
+                                  ).then((_) {
+                                    Get.back();
+                                  });
                                 }
                               });
                             },

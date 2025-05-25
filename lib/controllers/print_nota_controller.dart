@@ -162,15 +162,6 @@ class PrintNotaController extends GetxController {
       ),
     ]);
     bytes += generator.feed(1);
-    bytes += generator.hr();
-    bytes += generator.row([
-      PosColumn(
-        text: resultRowTransaction.orderType!,
-        width: 12,
-        styles: const PosStyles(align: PosAlign.left),
-      ),
-    ]);
-    bytes += generator.feed(1);
 
     //barcode
     // final List<int> barData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4];

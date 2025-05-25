@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:laundry/page/service/cart_page.dart';
+import 'package:laundry/page/service/checkout_page.dart';
 import 'package:laundry/utils/colors.dart';
 import 'package:laundry/utils/currency.dart';
 import 'package:laundry/utils/sizes.dart';
@@ -33,8 +34,9 @@ class _FooterServiceState extends State<FooterService> {
         ],
         color: Colors.white,
       ),
-      child: Obx(
-        () => Row(
+      child: Obx(() {
+        bool _isButtonDisabled = cartController.cartList.length == 0;
+        return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             InkWell(
@@ -97,13 +99,28 @@ class _FooterServiceState extends State<FooterService> {
             const Spacer(),
             ElevatedButton(
               onPressed: () {
-                cartController.showBottomSheet();
+                _isButtonDisabled
+                    ? null
+                    : showModalBottomSheet(
+                      context: context,
+                      builder: (context) => const CheckoutPage(),
+                      isScrollControlled: true,
+                      backgroundColor: Colors.white,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
+                    );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12), // <-- Radius
                 ),
-                backgroundColor: MyColors.primary,
+                backgroundColor:
+                    _isButtonDisabled
+                        ? MyColors.notionBgGrey
+                        : MyColors.primary,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 10,
@@ -113,17 +130,25 @@ class _FooterServiceState extends State<FooterService> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.save, color: Colors.white),
+                  Icon(
+                    Icons.save,
+                    color: _isButtonDisabled ? Colors.black : Colors.white,
+                  ),
                   Gap(5),
-                  Text('Checkout', style: TextStyle(color: Colors.white)),
+                  Text(
+                    'Checkout',
+                    style: TextStyle(
+                      color: _isButtonDisabled ? Colors.black : Colors.white,
+                    ),
+                  ),
                 ],
               ),
             ),
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 

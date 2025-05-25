@@ -27,9 +27,7 @@ class _IncrementAndDecrementState extends State<IncrementAndDecrement> {
             width: 30,
             height: 30,
             decoration: BoxDecoration(
-              color:
-                  MyColors
-                      .notionBgRed, // Set your desired background color here
+              color: MyColors.notionBgRed,
               shape: BoxShape.circle,
             ),
             child: IconButton(
@@ -85,9 +83,7 @@ class _IncrementAndDecrementState extends State<IncrementAndDecrement> {
             width: 30,
             height: 30,
             decoration: BoxDecoration(
-              color:
-                  MyColors
-                      .notionBgGreen, // Set your desired background color here
+              color: MyColors.notionBgGreen,
               shape: BoxShape.circle,
             ),
             child: IconButton(

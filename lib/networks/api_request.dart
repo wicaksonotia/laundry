@@ -131,9 +131,9 @@ class RemoteDataSource {
     }
   }
 
-  static Future<bool> saveTransaction(String kios, int discount) async {
+  static Future<bool> saveTransaction(Map<String, dynamic> data) async {
     try {
-      var rawFormat = jsonEncode({'kios': kios, 'discount': discount});
+      var rawFormat = jsonEncode(data);
       Dio dio = Dio();
       var url =
           ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.saveTransaction;
