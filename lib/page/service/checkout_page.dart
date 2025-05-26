@@ -70,22 +70,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
               const Gap(10),
-              ChipsChoice.single(
-                wrapped: true,
-                padding: EdgeInsets.zero,
-                value: _cartController.paymentStatus.value,
-                onChanged: (val) => _cartController.paymentStatus.value = val,
-                choiceItems: C2Choice.listFrom<bool, Map<String, dynamic>>(
-                  source: paymentCategory,
-                  value: (i, v) => v['value'] as bool,
-                  label: (i, v) => v['nama'] as String,
-                ),
-                choiceStyle: C2ChipStyle.filled(
-                  borderRadius: BorderRadius.circular(25),
-                  color: MyColors.notionBgGrey,
-                  selectedStyle: const C2ChipStyle(
-                    backgroundColor: MyColors.primary,
-                    borderRadius: BorderRadius.all(Radius.circular(25)),
+              Obx(
+                () => ChipsChoice.single(
+                  wrapped: true,
+                  padding: EdgeInsets.zero,
+                  value: _cartController.paymentStatus.value,
+                  onChanged: (val) => _cartController.paymentStatus.value = val,
+                  choiceItems: C2Choice.listFrom<bool, Map<String, dynamic>>(
+                    source: paymentCategory,
+                    value: (i, v) => v['value'] as bool,
+                    label: (i, v) => v['nama'] as String,
+                  ),
+                  choiceStyle: C2ChipStyle.filled(
+                    borderRadius: BorderRadius.circular(25),
+                    color: MyColors.notionBgGrey,
+                    selectedStyle: const C2ChipStyle(
+                      backgroundColor: MyColors.primary,
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
                   ),
                 ),
               ),

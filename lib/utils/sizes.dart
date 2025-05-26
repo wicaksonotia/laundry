@@ -26,9 +26,9 @@ class MySizes {
   static const double buttonElevation = 4.0;
 
   // Card sizes
-  static const double cardRadiusLg = 16.0;
-  static const double cardRadiusMd = 12.0;
-  static const double cardRadiusSm = 10.0;
   static const double cardRadiusXs = 6.0;
+  static const double cardRadiusSm = 10.0;
+  static const double cardRadiusMd = 12.0;
+  static const double cardRadiusLg = 16.0;
   static const double cardElevation = 2.0;
 }
