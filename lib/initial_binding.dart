@@ -12,7 +12,7 @@ class InitialBinding implements Bindings {
     Get.put<ServiceController>(ServiceController());
     Get.put<CategoryController>(CategoryController());
     Get.put<CartController>(CartController());
-    Get.put<HistoryController>(HistoryController());
+    // Get.put<HistoryController>(HistoryController());
     // Get.lazyPut<CategoryController>(() => CategoryController());
     // Get.lazyPut<ServiceController>(() => ServiceController());
     // Get.lazyPut<CartController>(() => CartController());

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:laundry/utils/colors.dart';
 import 'package:laundry/utils/sizes.dart';
 
 class BoxContainer extends StatelessWidget {

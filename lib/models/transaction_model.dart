@@ -1,35 +1,66 @@
 class TransactionModel {
+  String? status;
+  String? message;
+  int? income;
+  List<DataTransaction>? data;
+
+  TransactionModel({this.status, this.message, this.income, this.data});
+
+  TransactionModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    income = json['income'];
+    if (json['data'] != null) {
+      data = <DataTransaction>[];
+      json['data'].forEach((v) {
+        data!.add(DataTransaction.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    data['income'] = income;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class DataTransaction {
   int? id;
   int? numerator;
   String? transactionDate;
   String? kios;
-  int? grandTotal;
-  int? discount;
   int? total;
+  int? discount;
+  int? grandTotal;
   bool? paymentStatus;
   bool? washing;
-  DateTime? washingTime;
+  String? washingTime;
   bool? drying;
-  DateTime? dryingTime;
+  String? dryingTime;
   bool? ironing;
-  DateTime? ironingTime;
+  String? ironingTime;
   bool? delivering;
-  DateTime? deliveringTime;
+  String? deliveringTime;
+  String? customerName;
+  String? customerPhone;
+  String? customerAddress;
   bool? completed;
-  DateTime? clompletedTime;
-  late String customerName;
-  late String customerPhone;
-  late String customerAddress;
-  List<TransactionDetailModel>? details;
+  String? completedTime;
 
-  TransactionModel({
+  DataTransaction({
     this.id,
     this.numerator,
     this.transactionDate,
     this.kios,
-    this.grandTotal,
-    this.discount,
     this.total,
+    this.discount,
+    this.grandTotal,
     this.paymentStatus,
     this.washing,
     this.washingTime,
@@ -39,52 +70,35 @@ class TransactionModel {
     this.ironingTime,
     this.delivering,
     this.deliveringTime,
+    this.customerName,
+    this.customerPhone,
+    this.customerAddress,
     this.completed,
-    this.clompletedTime,
-    required this.customerName,
-    required this.customerPhone,
-    required this.customerAddress,
-    this.details,
+    this.completedTime,
   });
 
-  TransactionModel.fromJson(Map<String, dynamic> json) {
+  DataTransaction.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     numerator = json['numerator'];
     transactionDate = json['transaction_date'];
     kios = json['kios'];
-    grandTotal = json['grand_total'];
-    discount = json['discount'];
     total = json['total'];
+    discount = json['discount'];
+    grandTotal = json['grand_total'];
     paymentStatus = json['payment_status'];
     washing = json['washing'];
-    if (json['washing_time'] != null) {
-      washingTime = DateTime.parse(json['washing_time']);
-    }
+    washingTime = json['washing_time'];
     drying = json['drying'];
-    if (json['drying_time'] != null) {
-      dryingTime = DateTime.parse(json['drying_time']);
-    }
+    dryingTime = json['drying_time'];
     ironing = json['ironing'];
-    if (json['ironing_time'] != null) {
-      ironingTime = DateTime.parse(json['ironing_time']);
-    }
+    ironingTime = json['ironing_time'];
     delivering = json['delivering'];
-    if (json['delivering_time'] != null) {
-      deliveringTime = DateTime.parse(json['delivering_time']);
-    }
+    deliveringTime = json['delivering_time'];
+    customerName = json['customer_name'];
+    customerPhone = json['customer_phone'];
+    customerAddress = json['customer_address'];
     completed = json['completed'];
-    if (json['clompleted_time'] != null) {
-      clompletedTime = DateTime.parse(json['clompleted_time']);
-    }
-    customerName = json['customer_name'] ?? '';
-    customerPhone = json['customer_phone'] ?? '';
-    customerAddress = json['customer_address'] ?? '';
-    if (json['details'] != null) {
-      details = <TransactionDetailModel>[];
-      json['details'].forEach((v) {
-        details!.add(TransactionDetailModel.fromJson(v));
-      });
-    }
+    completedTime = json['completed_time'];
   }
 
   Map<String, dynamic> toJson() {
@@ -93,66 +107,23 @@ class TransactionModel {
     data['numerator'] = numerator;
     data['transaction_date'] = transactionDate;
     data['kios'] = kios;
-    data['grand_total'] = grandTotal;
-    data['discount'] = discount;
     data['total'] = total;
+    data['discount'] = discount;
+    data['grand_total'] = grandTotal;
     data['payment_status'] = paymentStatus;
     data['washing'] = washing;
-    if (washingTime != null) {
-      data['washing_time'] = washingTime!.toIso8601String();
-    }
+    data['washing_time'] = washingTime;
     data['drying'] = drying;
-    if (dryingTime != null) {
-      data['drying_time'] = dryingTime!.toIso8601String();
-    }
+    data['drying_time'] = dryingTime;
     data['ironing'] = ironing;
-    if (ironingTime != null) {
-      data['ironing_time'] = ironingTime!.toIso8601String();
-    }
+    data['ironing_time'] = ironingTime;
     data['delivering'] = delivering;
-    if (deliveringTime != null) {
-      data['delivering_time'] = deliveringTime!.toIso8601String();
-    }
-    data['completed'] = completed;
-    if (clompletedTime != null) {
-      data['clompleted_time'] = clompletedTime!.toIso8601String();
-    }
+    data['delivering_time'] = deliveringTime;
     data['customer_name'] = customerName;
     data['customer_phone'] = customerPhone;
     data['customer_address'] = customerAddress;
-    if (details != null) {
-      data['details'] = details!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class TransactionDetailModel {
-  String? productName;
-  double? quantity;
-  int? unitPrice;
-  int? totalPrice;
-
-  TransactionDetailModel({
-    this.productName,
-    this.quantity,
-    this.unitPrice,
-    this.totalPrice,
-  });
-
-  TransactionDetailModel.fromJson(Map<String, dynamic> json) {
-    productName = json['product_name'];
-    quantity = json['quantity'];
-    unitPrice = json['unit_price'];
-    totalPrice = json['total_price'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['product_name'] = productName;
-    data['quantity'] = quantity;
-    data['unit_price'] = unitPrice;
-    data['total_price'] = totalPrice;
+    data['completed'] = completed;
+    data['completed_time'] = completedTime;
     return data;
   }
 }

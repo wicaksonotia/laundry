@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:easy_stepper/easy_stepper.dart';
+import 'package:get/get.dart';
+import 'package:laundry/controllers/history_controller.dart';
 import 'package:laundry/utils/colors.dart';
 
 class StepperPage extends StatefulWidget {
   final int activeStep;
-  const StepperPage({super.key, required this.activeStep});
+  final int transactionId;
+  const StepperPage({
+    super.key,
+    required this.activeStep,
+    required this.transactionId,
+  });
 
   @override
   State<StepperPage> createState() => _StepperPageState();
 }
 
 class _StepperPageState extends State<StepperPage> {
+  final HistoryController _historyController = Get.find<HistoryController>();
+
   @override
   Widget build(BuildContext context) {
     return EasyStepper(
@@ -45,20 +54,21 @@ class _StepperPageState extends State<StepperPage> {
         EasyStep(
           customStep: GestureDetector(
             onTap: () {
-              print('tap');
+              _historyController.updateStatus(widget.transactionId, 'washing');
             },
             child: CircleAvatar(
-              child: CircleAvatar(
-                backgroundColor:
-                    widget.activeStep == 1 ? Colors.red : MyColors.notionBgBlue,
-              ),
+              backgroundColor:
+                  widget.activeStep == 1 ? Colors.red : MyColors.notionBgBlue,
             ),
           ),
           title: 'Cuci',
           topTitle: true,
         ),
         EasyStep(
-          customStep: CircleAvatar(
+          customStep: GestureDetector(
+            onTap: () {
+              _historyController.updateStatus(widget.transactionId, 'drying');
+            },
             child: CircleAvatar(
               backgroundColor:
                   widget.activeStep == 2 ? Colors.red : MyColors.notionBgBlue,
@@ -67,7 +77,10 @@ class _StepperPageState extends State<StepperPage> {
           title: 'Pengeringan',
         ),
         EasyStep(
-          customStep: CircleAvatar(
+          customStep: GestureDetector(
+            onTap: () {
+              _historyController.updateStatus(widget.transactionId, 'ironing');
+            },
             child: CircleAvatar(
               backgroundColor:
                   widget.activeStep == 3 ? Colors.red : MyColors.notionBgBlue,
@@ -77,14 +90,19 @@ class _StepperPageState extends State<StepperPage> {
           topTitle: true,
         ),
         EasyStep(
-          customStep: CircleAvatar(
+          customStep: GestureDetector(
+            onTap: () {
+              _historyController.updateStatus(
+                widget.transactionId,
+                'completed',
+              );
+            },
             child: CircleAvatar(
               backgroundColor:
                   widget.activeStep == 4 ? Colors.red : MyColors.notionBgBlue,
             ),
           ),
           title: 'Selesai',
-          topTitle: true,
         ),
       ],
     );

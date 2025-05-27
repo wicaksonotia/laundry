@@ -11,5 +11,8 @@ class _AuthEndPoints {
   final String getListTransaction = 'getlisttransaction';
   final String getRowTransaction = 'getrowtransaction';
   final String saveDetailTransaction = 'savedetailtransaction';
-  final String getListTransactionDetail = 'getlisttransactiondetail';
+  final String getDetailTransaction = 'getdetailtransaction';
+  final String updateStatus = 'updatestatus';
+  final String transactionHistoryByMonth = 'transactionhistorybymonth';
+  final String transactionHistoryByDateRange = 'transactionhistorybydaterange';
 }

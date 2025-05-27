@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:laundry/models/category_model.dart';
 import 'package:laundry/models/service_model.dart';
 import 'package:laundry/models/transaction_model.dart';
+import 'package:laundry/models/transaction_detail_model.dart';
 import 'package:laundry/networks/api_endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,14 +66,18 @@ class RemoteDataSource {
   }
 
   // GET ROW TRANSACTION BY NUMERATOR AND KIOS
-  static Future<TransactionModel?> getRowTransactionDetails(
-    int numerator,
-    String kios,
+  static Future<TransactionModel?> getRowTransaction(
+    Map<String, dynamic> data,
   ) async {
     try {
+      var rawFormat = jsonEncode(data);
       var url =
           ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.getRowTransaction;
-      final response = await Dio().get('$url?numerator=$numerator&kios=$kios');
+      final response = await Dio().post(
+        url,
+        data: rawFormat,
+        options: Options(contentType: Headers.jsonContentType),
+      );
       if (response.statusCode == 200) {
         dynamic jsonData = response.data;
         return TransactionModel.fromJson(jsonData);
@@ -114,15 +119,19 @@ class RemoteDataSource {
   }
 
   // GET LIST TRANSACTION DETAIL BY NUMERATOR AND KIOS
-  static Future<List<TransactionDetailModel>?> getListTransactionDetails(
-    int numerator,
-    String kios,
+  static Future<List<TransactionDetailModel>?> getDetailTransaction(
+    Map<String, dynamic> data,
   ) async {
     try {
+      var rawFormat = jsonEncode(data);
       var url =
           ApiEndPoints.baseUrl +
-          ApiEndPoints.authEndpoints.getListTransactionDetail;
-      final response = await Dio().get('$url?numerator=$numerator&kios=$kios');
+          ApiEndPoints.authEndpoints.getDetailTransaction;
+      final response = await Dio().post(
+        url,
+        data: rawFormat,
+        options: Options(contentType: Headers.jsonContentType),
+      );
       if (response.statusCode == 200) {
         List<dynamic> jsonData = response.data;
         // print(jsonData);
@@ -179,6 +188,73 @@ class RemoteDataSource {
       return false;
     } catch (error) {
       return false;
+    }
+  }
+
+  //UPDATE STATUS
+  static Future<bool> updateStatus(Map<String, dynamic> data) async {
+    try {
+      var rawFormat = jsonEncode(data);
+      Dio dio = Dio();
+      var url = ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.updateStatus;
+      Response response = await dio.post(
+        url,
+        data: rawFormat,
+        options: Options(contentType: Headers.jsonContentType),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  static Future<TransactionModel?> transactionHistoryByDateRange(
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      var rawFormat = jsonEncode(data);
+      var url =
+          ApiEndPoints.baseUrl +
+          ApiEndPoints.authEndpoints.transactionHistoryByDateRange;
+      Response response = await Dio().post(
+        url,
+        data: rawFormat,
+        options: Options(contentType: Headers.jsonContentType),
+      );
+      if (response.statusCode == 200) {
+        final TransactionModel res = TransactionModel.fromJson(response.data);
+        return res;
+      }
+      return null;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<TransactionModel?> transactionHistoryByMonth(
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      var rawFormat = jsonEncode(data);
+      // print(rawFormat);
+      var url =
+          ApiEndPoints.baseUrl +
+          ApiEndPoints.authEndpoints.transactionHistoryByMonth;
+      Response response = await Dio().post(
+        url,
+        data: rawFormat,
+        options: Options(contentType: Headers.jsonContentType),
+      );
+      if (response.statusCode == 200) {
+        final TransactionModel res = TransactionModel.fromJson(response.data);
+        return res;
+      }
+      return null;
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 }

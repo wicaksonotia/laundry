@@ -1,11 +1,11 @@
-import 'package:laundry/models/transaction_model.dart';
+import 'package:laundry/models/transaction_detail_model.dart';
 import 'package:laundry/networks/api_request.dart';
 import 'package:laundry/utils/currency.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:image/image.dart';
+import 'package:image/image.dart' as img;
 import 'package:intl/intl.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
@@ -69,8 +69,8 @@ class PrintNotaController extends GetxController {
     // IMAGE
     final ByteData data = await rootBundle.load('assets/images/logo.jpg');
     final Uint8List bytesImg = data.buffer.asUint8List();
-    final image = decodeImage(bytesImg);
-    final resizedImage = copyResize(image!, width: 300);
+    final image = img.decodeImage(bytesImg);
+    final resizedImage = img.copyResize(image!, width: 300);
     bytes += generator.image(resizedImage);
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -81,18 +81,16 @@ class PrintNotaController extends GetxController {
     );
     bytes += generator.feed(1);
 
-    var resultListTransaction =
-        await RemoteDataSource.getListTransactionDetails(numerator, kios);
-    var resultRowTransaction = await RemoteDataSource.getRowTransactionDetails(
-      numerator,
-      kios,
-    );
+    var resultListTransaction = await RemoteDataSource.getDetailTransaction({
+      'kios': kios,
+      'numerator': numerator,
+    });
     transactionDetailItems.assignAll(resultListTransaction!);
     // CART LIST
     for (var cartItem in transactionDetailItems) {
       bytes += generator.row([
         PosColumn(
-          text: cartItem.productName ?? 'Unknown Product',
+          text: cartItem.serviceName ?? 'Unknown Product',
           width: 7,
           styles: const PosStyles(align: PosAlign.left),
         ),
@@ -133,14 +131,6 @@ class PrintNotaController extends GetxController {
         width: 6,
         styles: const PosStyles(align: PosAlign.left),
       ),
-      PosColumn(
-        text:
-            resultRowTransaction!.discount.toString() == '0'
-                ? '0'
-                : CurrencyFormat.convertToIdr(resultRowTransaction.discount, 0),
-        width: 6,
-        styles: const PosStyles(align: PosAlign.right),
-      ),
     ]);
     bytes += generator.hr();
     bytes += generator.row([
@@ -148,17 +138,6 @@ class PrintNotaController extends GetxController {
         text: 'Grand Total',
         width: 6,
         styles: const PosStyles(align: PosAlign.left),
-      ),
-      PosColumn(
-        text: CurrencyFormat.convertToIdr(
-          transactionDetailItems
-                  .map((e) => e.totalPrice)
-                  .fold(0, (value, element) => value + element!) -
-              resultRowTransaction.discount!,
-          0,
-        ),
-        width: 6,
-        styles: const PosStyles(align: PosAlign.right),
       ),
     ]);
     bytes += generator.feed(1);
@@ -181,8 +160,8 @@ class PrintNotaController extends GetxController {
       'assets/images/hastag.jpg',
     );
     final Uint8List _bytesImgHastag = _dataHastag.buffer.asUint8List();
-    final _imageHastag = decodeImage(_bytesImgHastag);
-    final _resizedImageHastag = copyResize(_imageHastag!, width: 300);
+    final _imageHastag = img.decodeImage(_bytesImgHastag);
+    final _resizedImageHastag = img.copyResize(_imageHastag!, width: 300);
     bytes += generator.image(_resizedImageHastag);
 
     bytes += generator.feed(2);
