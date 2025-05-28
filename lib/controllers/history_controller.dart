@@ -10,10 +10,13 @@ class HistoryController extends GetxController {
   var startDate = DateTime.now().obs;
   var endDate = DateTime.now().obs;
   var filterBy = 'bulan'.obs;
+  var filterStatus = 'all'.obs;
   var initMonth = DateTime.now().month.obs;
   var initYear = DateTime.now().year.obs;
   var kios = 'laundry-stg'.obs;
   var total = 0.obs;
+  var isSideBarOpen = false.obs;
+  var searchText = ''.obs;
 
   @override
   void onInit() {
@@ -29,6 +32,8 @@ class HistoryController extends GetxController {
       if (filterBy.value == 'bulan') {
         var data = {
           'monthYear': '${initMonth.value}-${initYear.value}',
+          'searchText': searchText.value,
+          'status': filterStatus.value,
           'kios': kios.value,
         };
         result = await RemoteDataSource.transactionHistoryByMonth(data);
@@ -36,11 +41,12 @@ class HistoryController extends GetxController {
         var data = {
           'startDate': startDate.value,
           'endDate': endDate.value,
+          'searchText': searchText.value,
+          'status': filterStatus.value,
           'kios': kios.value,
         };
         result = await RemoteDataSource.transactionHistoryByDateRange(data);
       }
-      // print(result?.data!.length);
       if (result != null) {
         transactions.assignAll(result.data!);
         total.value = transactions.fold(
@@ -126,5 +132,9 @@ class HistoryController extends GetxController {
       endDate.value = pickedDate.end;
       fetchData();
     }
+  }
+
+  void toggleSideBar() {
+    isSideBarOpen.value = !isSideBarOpen.value;
   }
 }

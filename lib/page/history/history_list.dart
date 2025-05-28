@@ -60,11 +60,13 @@ class _HistoryListState extends State<HistoryList> {
           itemBuilder: (BuildContext context, IndexPath index) {
             var items =
                 resultDataMap.values.toList()[index.section][index.index];
-            var kondisi = 'Proses';
+            var kondisi = 'Masih Antri';
             if (items.delivering!) {
               kondisi = 'Sudah Diambil';
             } else if (items.completed!) {
               kondisi = 'Selesai';
+            } else if (items.washing! || items.drying! || items.ironing!) {
+              kondisi = 'Proses';
             }
             return BoxContainer(
               padding: const EdgeInsets.all(10.0),

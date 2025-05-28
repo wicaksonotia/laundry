@@ -28,7 +28,7 @@ class _FilterDateRangeState extends State<FilterDateRange> {
               _historyController.showDialogDateRangePicker();
             },
             child: Text(
-              '${DateFormat('dd MMMM yyyy').format(_historyController.startDate.value)} - ${DateFormat('dd MMMM yyyy').format(_historyController.endDate.value)}',
+              '${DateFormat('dd MMM yyyy').format(_historyController.startDate.value)} - ${DateFormat('dd MMM yyyy').format(_historyController.endDate.value)}',
               style: const TextStyle(color: Colors.black),
             ),
           ),

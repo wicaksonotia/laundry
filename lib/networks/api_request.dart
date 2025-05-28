@@ -215,13 +215,15 @@ class RemoteDataSource {
     Map<String, dynamic> data,
   ) async {
     try {
-      var rawFormat = jsonEncode(data);
+      var rawFormat = Map<String, dynamic>.from(data);
+      rawFormat['startDate'] = data['startDate'].toString();
+      rawFormat['endDate'] = data['endDate'].toString();
       var url =
           ApiEndPoints.baseUrl +
           ApiEndPoints.authEndpoints.transactionHistoryByDateRange;
       Response response = await Dio().post(
         url,
-        data: rawFormat,
+        data: jsonEncode(rawFormat),
         options: Options(contentType: Headers.jsonContentType),
       );
       if (response.statusCode == 200) {
@@ -230,6 +232,7 @@ class RemoteDataSource {
       }
       return null;
     } catch (e) {
+      print(e);
       throw Exception(e.toString());
     }
   }

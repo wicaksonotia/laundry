@@ -18,7 +18,10 @@ class NavigationDrawer extends StatelessWidget {
             buildDrawerItem(
               icon: Icons.photo,
               text: "Layanan",
-              onTap: () => Get.toNamed(RouterClass.servicePage),
+              onTap: () {
+                Navigator.of(context).pop();
+                Get.toNamed(RouterClass.servicePage);
+              },
               tileColor: Colors.black,
               textIconColor:
                   Get.currentRoute == RouterClass.servicePage
@@ -28,7 +31,10 @@ class NavigationDrawer extends StatelessWidget {
             buildDrawerItem(
               icon: Icons.video_call,
               text: "Riwayat Transaksi",
-              onTap: () => Get.toNamed(RouterClass.historyPage),
+              onTap: () {
+                Navigator.of(context).pop();
+                Get.toNamed(RouterClass.historyPage);
+              },
               tileColor: Colors.black,
               textIconColor:
                   Get.currentRoute == RouterClass.historyPage

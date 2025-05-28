@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:laundry/controllers/history_controller.dart';
 import 'package:laundry/utils/colors.dart';
+import 'package:laundry/utils/sizes.dart';
 
 class FilterMonth extends StatefulWidget {
   const FilterMonth({super.key});
@@ -20,52 +21,56 @@ class _FilterMonthState extends State<FilterMonth> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
+          iconSize: MySizes.iconSm,
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => _historyController.nextOrPreviousMonth(false),
+          onPressed: () {
+            _historyController.nextOrPreviousMonth(false);
+            _historyController.fetchData();
+          },
         ),
-        Expanded(
-          child: Center(
-            child: Obx(
-              () => GestureDetector(
-                onTap: () async {
-                  showMonthPicker(
-                    context,
-                    onSelected: (month, year) {
-                      month = month;
-                      year = year;
-                      _historyController.initMonth.value = month;
-                      _historyController.initYear.value = year;
-                    },
-                    initialSelectedMonth: _historyController.initMonth.value,
-                    initialSelectedYear: _historyController.initYear.value,
-                    firstEnabledMonth: 1,
-                    lastEnabledMonth: enableMonth,
-                    firstYear: _historyController.initYear.value,
-                    lastYear: _historyController.initYear.value,
-                    selectButtonText: 'OK',
-                    cancelButtonText: 'Cancel',
-                    highlightColor: MyColors.primary,
-                    textColor: Colors.black,
-                    contentBackgroundColor: Colors.white,
-                    dialogBackgroundColor: Colors.grey[200],
-                  );
-                },
-                child: Text(
-                  "${DateFormat('MMMM').format(DateTime(0, _historyController.initMonth.value))} ${_historyController.initYear.value}",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+        Center(
+          child: Obx(
+            () => GestureDetector(
+              onTap: () async {
+                showMonthPicker(
+                  context,
+                  onSelected: (month, year) {
+                    month = month;
+                    year = year;
+                    _historyController.initMonth.value = month;
+                    _historyController.initYear.value = year;
+                    _historyController.fetchData();
+                  },
+                  initialSelectedMonth: _historyController.initMonth.value,
+                  initialSelectedYear: _historyController.initYear.value,
+                  firstEnabledMonth: 1,
+                  lastEnabledMonth: enableMonth,
+                  firstYear: _historyController.initYear.value,
+                  lastYear: _historyController.initYear.value,
+                  selectButtonText: 'OK',
+                  cancelButtonText: 'Cancel',
+                  highlightColor: MyColors.primary,
+                  textColor: Colors.black,
+                  contentBackgroundColor: Colors.white,
+                  dialogBackgroundColor: Colors.grey[200],
+                );
+              },
+              child: Text(
+                "${DateFormat('MMMM').format(DateTime(0, _historyController.initMonth.value))} ${_historyController.initYear.value}",
+                style: const TextStyle(
+                  fontSize: MySizes.fontSizeMd,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
         ),
         IconButton(
+          iconSize: MySizes.iconSm,
           icon: const Icon(Icons.arrow_forward_ios),
           onPressed: () {
             if (_historyController.initYear.value < DateTime.now().year ||
@@ -73,6 +78,7 @@ class _FilterMonthState extends State<FilterMonth> {
                     _historyController.initMonth.value <
                         DateTime.now().month)) {
               _historyController.nextOrPreviousMonth(true);
+              _historyController.fetchData();
               month = _historyController.initMonth.value;
               year = _historyController.initYear.value;
             }

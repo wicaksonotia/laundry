@@ -68,40 +68,35 @@ class _FooterReportState extends State<FooterReport> {
               ],
             ),
             const Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                // showModalBottomSheet(
-                //   context: context,
-                //   builder: (context) => const FilterReport(),
-                //   isScrollControlled: true,
-                //   backgroundColor: Colors.white,
-                //   shape: const RoundedRectangleBorder(
-                //     borderRadius:
-                //         BorderRadius.vertical(top: Radius.circular(20)),
-                //   ),
-                // );
+            Builder(
+              builder: (context) {
+                return ElevatedButton(
+                  onPressed: () {
+                    widget.historyController.toggleSideBar();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // <-- Radius
+                    ),
+                    backgroundColor: MyColors.primary,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: MySizes.fontSizeMd,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.filter_alt_outlined, color: Colors.white),
+                      Gap(5),
+                      Text('Filter', style: TextStyle(color: Colors.white)),
+                    ],
+                  ),
+                );
               },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
-                ),
-                backgroundColor: MyColors.primary,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
-                textStyle: const TextStyle(
-                  fontSize: MySizes.fontSizeMd,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.filter_alt_outlined, color: Colors.white),
-                  Gap(5),
-                  Text('Filter', style: TextStyle(color: Colors.white)),
-                ],
-              ),
             ),
           ],
         ),
