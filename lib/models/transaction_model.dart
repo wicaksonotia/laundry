@@ -52,6 +52,7 @@ class DataTransaction {
   String? customerAddress;
   bool? completed;
   String? completedTime;
+  List<DataTransactionDetails>? details;
 
   DataTransaction({
     this.id,
@@ -75,6 +76,7 @@ class DataTransaction {
     this.customerAddress,
     this.completed,
     this.completedTime,
+    this.details,
   });
 
   DataTransaction.fromJson(Map<String, dynamic> json) {
@@ -99,6 +101,12 @@ class DataTransaction {
     customerAddress = json['customer_address'];
     completed = json['completed'];
     completedTime = json['completed_time'];
+    if (json['details'] != null) {
+      details = <DataTransactionDetails>[];
+      json['details'].forEach((v) {
+        details!.add(DataTransactionDetails.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -124,6 +132,39 @@ class DataTransaction {
     data['customer_address'] = customerAddress;
     data['completed'] = completed;
     data['completed_time'] = completedTime;
+    if (details != null) {
+      data['details'] = details!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class DataTransactionDetails {
+  String? serviceName;
+  String? quantity;
+  int? unitPrice;
+  int? totalPrice;
+
+  DataTransactionDetails({
+    this.serviceName,
+    this.quantity,
+    this.unitPrice,
+    this.totalPrice,
+  });
+
+  DataTransactionDetails.fromJson(Map<String, dynamic> json) {
+    serviceName = json['service_name'];
+    quantity = json['quantity'];
+    unitPrice = json['unit_price'];
+    totalPrice = json['total_price'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['service_name'] = serviceName;
+    data['quantity'] = quantity;
+    data['unit_price'] = unitPrice;
+    data['total_price'] = totalPrice;
     return data;
   }
 }

@@ -67,14 +67,33 @@ class HistoryController extends GetxController {
     }
   }
 
-  void updateStatus(int id, String category) async {
+  void updateStatus(int id, int idxCategory) async {
     try {
       isLoading(true);
-      var data = {'id': id, 'category': category};
+      var data = {'id': id, 'category': idxCategory};
       var result = await RemoteDataSource.updateStatus(data);
       if (result) {
-        fetchData();
+        Get.snackbar(
+          'Success',
+          'Status berhasil diupdate',
+          icon: const Icon(Icons.error),
+          snackPosition: SnackPosition.TOP,
+        );
+      } else {
+        Get.snackbar(
+          'Error',
+          'Status gagal diupdate',
+          icon: const Icon(Icons.error),
+          snackPosition: SnackPosition.TOP,
+        );
       }
+    } catch (error) {
+      Get.snackbar(
+        'Error',
+        error.toString(),
+        icon: const Icon(Icons.error),
+        snackPosition: SnackPosition.TOP,
+      );
     } finally {
       isLoading(false);
     }

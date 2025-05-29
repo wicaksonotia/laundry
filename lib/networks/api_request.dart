@@ -143,37 +143,16 @@ class RemoteDataSource {
     }
   }
 
-  // SAVE DETAIL TRANSACTION
-  static Future<bool> saveDetailTransaction(List<dynamic> data) async {
-    try {
-      var rawFormat = jsonEncode(data);
-      Dio dio = Dio();
-      var url =
-          ApiEndPoints.baseUrl +
-          ApiEndPoints.authEndpoints.saveDetailTransaction;
-      Response response = await dio.post(
-        url,
-        data: rawFormat,
-        options: Options(contentType: Headers.jsonContentType),
-      );
-      if (response.statusCode == 200) {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString(
-          'numerator',
-          response.data['numerator'].toString(),
-        );
-        return true;
-      }
-      return false;
-    } catch (error) {
-      return false;
-    }
-  }
-
   // SAVE TRANSACTION
-  static Future<bool> saveTransaction(Map<String, dynamic> data) async {
+  static Future<bool> saveTransaction(
+    Map<String, dynamic> dataTransaction,
+    List<dynamic> dataDetail,
+  ) async {
     try {
-      var rawFormat = jsonEncode(data);
+      var rawFormat = jsonEncode({
+        'transaction': dataTransaction,
+        'details': dataDetail,
+      });
       Dio dio = Dio();
       var url =
           ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.saveTransaction;

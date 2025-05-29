@@ -6,6 +6,7 @@ class MyColors {
   // static const Color secondary = Color(0xFFBF00FF);
   static const Color primary = Color(0xFF2e80cd);
   static const Color secondary = Color(0xFF8ccbf3);
+  static const Color whatsapp = Color(0xFF4caf50);
 
   // Notion Background Colors
   static const Color notionBgGrey = Color(0xFFF1F1EF);

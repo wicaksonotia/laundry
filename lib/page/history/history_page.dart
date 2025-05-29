@@ -5,9 +5,7 @@ import 'package:laundry/controllers/history_controller.dart';
 import 'package:laundry/drawer/nav_drawer.dart' as custom_drawer;
 import 'package:laundry/page/history/footer.dart';
 import 'package:laundry/page/history/history_list.dart';
-// import 'package:laundry/page/history/stepper_page.dart';
 import 'package:laundry/page/history/sidebar_filter.dart';
-import 'package:laundry/utils/colors.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -62,7 +60,7 @@ class _HistoryPageState extends State<HistoryPage> {
           RefreshIndicator(
             onRefresh: _refresh,
             child: Container(
-              color: MyColors.notionBgGrey,
+              color: Colors.grey.shade50,
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Column(
                 children: [

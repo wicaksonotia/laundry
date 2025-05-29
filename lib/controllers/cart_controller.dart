@@ -107,7 +107,7 @@ class CartController extends GetxController {
       isLoading(true);
       // final SharedPreferences prefs = await SharedPreferences.getInstance();
       var kios = 'laundry-stg';
-      var payload =
+      var dataDetailTransaction =
           cartList.map((cartItem) {
             return {
               'id_service': cartItem.id,
@@ -118,39 +118,36 @@ class CartController extends GetxController {
               'kios': kios,
             };
           }).toList();
-      var resultSave = await RemoteDataSource.saveDetailTransaction(payload);
+      var dataTransaction = {
+        'kios': kios,
+        'discount': discount,
+        'payment': paymentStatus.value,
+        'customer_name': customerNameController.text,
+        'customer_phone': customerPhoneController.text,
+        'customer_address': customerAddressController.text,
+      };
+      var resultSave = await RemoteDataSource.saveTransaction(
+        dataTransaction,
+        dataDetailTransaction,
+      );
       if (resultSave) {
-        // SAVE TRANSACTION
-        var dataTransaction = {
-          'kios': kios,
-          'discount': discount,
-          'payment': paymentStatus.value,
-          'customer_name': customerNameController.text,
-          'customer_phone': customerPhoneController.text,
-          'customer_address': customerAddressController.text,
-        };
-        var resultSave = await RemoteDataSource.saveTransaction(
-          dataTransaction,
+        Get.snackbar(
+          'Notification',
+          'Data saved successfully',
+          icon: const Icon(Icons.check),
+          snackPosition: SnackPosition.TOP,
         );
-        if (resultSave) {
-          Get.snackbar(
-            'Notification',
-            'Data saved successfully',
-            icon: const Icon(Icons.check),
-            snackPosition: SnackPosition.TOP,
-          );
-          // PRINT TRANSACTION
-          // _printNotaController.printTransaction(
-          //   int.parse(prefs.getString('numerator')!),
-          //   prefs.getString('username')!,
-          // );
-          // CLEAR TRANSACTION
-          cartList.clear();
-          totalAllQuantity = 0.obs;
-          totalPrice.value = 0;
-          paymentStatus.value = false;
-          update();
-        }
+        // PRINT TRANSACTION
+        // _printNotaController.printTransaction(
+        //   int.parse(prefs.getString('numerator')!),
+        //   prefs.getString('username')!,
+        // );
+        // CLEAR TRANSACTION
+        cartList.clear();
+        totalAllQuantity = 0.obs;
+        totalPrice.value = 0;
+        paymentStatus.value = false;
+        update();
       }
     } catch (e) {
       Get.snackbar(

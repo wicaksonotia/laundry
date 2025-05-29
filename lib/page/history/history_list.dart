@@ -9,6 +9,7 @@ import 'package:laundry/utils/colors.dart';
 import 'package:laundry/utils/currency.dart';
 import 'package:laundry/utils/sizes.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:laundry/page/history/detail_page.dart';
 
 class HistoryList extends StatefulWidget {
   final HistoryController historyController;
@@ -72,8 +73,8 @@ class _HistoryListState extends State<HistoryList> {
               padding: const EdgeInsets.all(10.0),
               radius: 0,
               shadow: false,
-              showBorder: true,
-              borderColor: Colors.grey.shade200,
+              // showBorder: true,
+              // borderColor: Colors.grey.shade200,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -175,13 +176,23 @@ class _HistoryListState extends State<HistoryList> {
                           ),
                         ],
                       ),
-                      CircleAvatar(
-                        radius: 12,
-                        backgroundColor: MyColors.notionBgBlue,
-                        child: Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: MyColors.primary,
-                          size: MySizes.iconSm,
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            () => DetailPage(
+                              transaction: items,
+                              historyController: widget.historyController,
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 12,
+                          backgroundColor: MyColors.notionBgBlue,
+                          child: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: MyColors.primary,
+                            size: MySizes.iconSm,
+                          ),
                         ),
                       ),
                     ],

@@ -54,7 +54,7 @@ class _StepperPageState extends State<StepperPage> {
         EasyStep(
           customStep: GestureDetector(
             onTap: () {
-              _historyController.updateStatus(widget.transactionId, 'washing');
+              _historyController.updateStatus(widget.transactionId, 0);
             },
             child: CircleAvatar(
               backgroundColor:
@@ -67,7 +67,7 @@ class _StepperPageState extends State<StepperPage> {
         EasyStep(
           customStep: GestureDetector(
             onTap: () {
-              _historyController.updateStatus(widget.transactionId, 'drying');
+              _historyController.updateStatus(widget.transactionId, 1);
             },
             child: CircleAvatar(
               backgroundColor:
@@ -79,7 +79,7 @@ class _StepperPageState extends State<StepperPage> {
         EasyStep(
           customStep: GestureDetector(
             onTap: () {
-              _historyController.updateStatus(widget.transactionId, 'ironing');
+              _historyController.updateStatus(widget.transactionId, 1);
             },
             child: CircleAvatar(
               backgroundColor:
@@ -92,10 +92,7 @@ class _StepperPageState extends State<StepperPage> {
         EasyStep(
           customStep: GestureDetector(
             onTap: () {
-              _historyController.updateStatus(
-                widget.transactionId,
-                'completed',
-              );
+              _historyController.updateStatus(widget.transactionId, 2);
             },
             child: CircleAvatar(
               backgroundColor:
