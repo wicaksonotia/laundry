@@ -11,15 +11,15 @@ import 'package:laundry/utils/sizes.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:laundry/page/history/detail_page.dart';
 
-class HistoryList extends StatefulWidget {
+class HistoryListV1 extends StatefulWidget {
   final HistoryController historyController;
-  const HistoryList({super.key, required this.historyController});
+  const HistoryListV1({super.key, required this.historyController});
 
   @override
-  State<HistoryList> createState() => _HistoryListState();
+  State<HistoryListV1> createState() => _HistoryListV1State();
 }
 
-class _HistoryListState extends State<HistoryList> {
+class _HistoryListV1State extends State<HistoryListV1> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -69,112 +69,78 @@ class _HistoryListState extends State<HistoryList> {
             } else if (items.washing! || items.drying! || items.ironing!) {
               kondisi = 'Proses';
             }
-            return GestureDetector(
-              onTap: () {
-                Get.to(
-                  () => DetailPage(
-                    transaction: items,
-                    historyController: widget.historyController,
-                  ),
-                );
-              },
-              child: BoxContainer(
-                padding: const EdgeInsets.all(10.0),
-                radius: 0,
-                shadow: false,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Order ID #${items.numerator.toString().padLeft(4, '0').toUpperCase()}',
-                          style: TextStyle(
-                            fontSize: MySizes.fontSizeMd,
-                            fontWeight: FontWeight.bold,
-                          ),
+            return BoxContainer(
+              padding: const EdgeInsets.all(10.0),
+              radius: 0,
+              shadow: false,
+              // showBorder: true,
+              // borderColor: Colors.grey.shade200,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: BoxContainer(
+                      width: 50,
+                      height: 50,
+                      radius: 5,
+                      backgroundColor: MyColors.notionBgGreen,
+                      borderColor: Colors.grey.shade200,
+                      child: Center(
+                        child: Image.asset(
+                          'assets/images/washing-machine.png',
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
                         ),
-                        Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              MySizes.buttonElevation,
-                            ),
-                            color: MyColors.notionBgYellow,
-                          ),
-                          child: Text(
-                            kondisi,
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontSize: MySizes.fontSizeXsm,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: BoxContainer(
-                        width: 50,
-                        height: 50,
-                        radius: 5,
-                        backgroundColor: MyColors.notionBgYellow,
-                        borderColor: Colors.grey.shade200,
-                        child: Center(
-                          child: Image.asset(
-                            'assets/images/washing-machine.png',
-                            width: 35,
-                            height: 35,
-                            fit: BoxFit.cover,
-                          ),
+                    title: Text(
+                      items.customerName.toString().toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: MySizes.fontSizeMd,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      DateFormat(
+                        'dd MMM yyyy - HH:mm',
+                      ).format(DateTime.parse(items.transactionDate!)),
+                      style: const TextStyle(
+                        fontSize: MySizes.fontSizeSm,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    trailing: Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          MySizes.buttonElevation,
+                        ),
+                        color: MyColors.notionBgGrey,
+                      ),
+                      child: Text(
+                        kondisi,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      title: Column(
+                    ),
+                  ),
+                  // StepperPage(
+                  //   activeStep: activeStep,
+                  //   transactionId: transaction.id!,
+                  // ),
+                  Divider(color: Colors.grey.shade200, thickness: 1),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Text(''),
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            items.customerName.toString().toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: MySizes.fontSizeMd,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on, size: 15),
-                              Gap(5),
-                              Text(
-                                items.customerAddress.toString().toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: MySizes.fontSizeSm,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      subtitle: Row(
-                        children: [
-                          const Icon(Icons.calendar_month, size: 15),
-                          Gap(5),
-                          Text(
-                            DateFormat(
-                              'dd MMM yyyy - HH:mm',
-                            ).format(DateTime.parse(items.transactionDate!)),
-                            style: const TextStyle(
-                              fontSize: MySizes.fontSizeSm,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      trailing: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           RichText(
                             text: TextSpan(
@@ -190,7 +156,7 @@ class _HistoryListState extends State<HistoryList> {
                                     0,
                                   ),
                                   style: const TextStyle(
-                                    fontSize: MySizes.fontSizeMd,
+                                    fontSize: MySizes.fontSizeLg,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -201,19 +167,37 @@ class _HistoryListState extends State<HistoryList> {
                           Text(
                             '* ${(items.paymentStatus ?? false) ? 'sudah bayar' : 'belum bayar'}',
                             style: TextStyle(
-                              fontSize: MySizes.fontSizeXsm,
+                              fontSize: MySizes.fontSizeSm,
                               color:
                                   items.paymentStatus ?? false
                                       ? Colors.grey
                                       : Colors.red,
-                              fontStyle: FontStyle.italic,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            () => DetailPage(
+                              transaction: items,
+                              historyController: widget.historyController,
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 12,
+                          backgroundColor: MyColors.notionBgBlue,
+                          child: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: MyColors.primary,
+                            size: MySizes.iconSm,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             );
           },
