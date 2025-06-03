@@ -13,7 +13,6 @@ class CategoryMenu extends StatefulWidget {
 }
 
 class _CategoryMenuState extends State<CategoryMenu> {
-  String segmentedControlGroupValue = 'Self Service';
   final ServiceController _serviceController = Get.find<ServiceController>();
   final CategoryController _categoryController = Get.find<CategoryController>();
 
@@ -69,7 +68,7 @@ class _CategoryMenuState extends State<CategoryMenu> {
           backgroundColor: Colors.transparent,
           thumbColor: MyColors.primary,
           padding: const EdgeInsets.all(5),
-          groupValue: segmentedControlGroupValue,
+          groupValue: _serviceController.category.value,
           children: Map.fromEntries(
             _categoryController.categories.map(
               (item) => MapEntry(
@@ -78,7 +77,7 @@ class _CategoryMenuState extends State<CategoryMenu> {
                   item.name ?? "",
                   style: TextStyle(
                     color:
-                        segmentedControlGroupValue == item.name
+                        _serviceController.category.value == item.name
                             ? Colors.white
                             : Colors.black,
                   ),
@@ -88,8 +87,7 @@ class _CategoryMenuState extends State<CategoryMenu> {
           ),
           onValueChanged: (value) {
             setState(() {
-              segmentedControlGroupValue = value!;
-              _serviceController.category.value = value.toString();
+              _serviceController.category.value = value!;
               _serviceController.fetchProduct();
             });
           },

@@ -3,8 +3,9 @@ import 'package:laundry/controllers/cart_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:laundry/controllers/service_controller.dart';
 import 'package:laundry/page/service/cart_page.dart';
-import 'package:laundry/page/service/checkout_page.dart';
+import 'package:laundry/routes.dart';
 import 'package:laundry/utils/colors.dart';
 import 'package:laundry/utils/currency.dart';
 import 'package:laundry/utils/sizes.dart';
@@ -17,7 +18,8 @@ class FooterService extends StatefulWidget {
 }
 
 class _FooterServiceState extends State<FooterService> {
-  final CartController cartController = Get.find<CartController>();
+  final CartController _cartController = Get.find<CartController>();
+  final ServiceController _serviceController = Get.find<ServiceController>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class _FooterServiceState extends State<FooterService> {
         color: Colors.white,
       ),
       child: Obx(() {
-        bool _isButtonDisabled = cartController.cartList.length == 0;
+        bool _isButtonDisabled = _cartController.cartList.length == 0;
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -57,7 +59,7 @@ class _FooterServiceState extends State<FooterService> {
                 children: [
                   badges.Badge(
                     badgeContent: Text(
-                      cartController.totalAllQuantity.value.toString(),
+                      _cartController.totalAllQuantity.value.toString(),
                       style: const TextStyle(color: Colors.white),
                     ),
                     badgeAnimation: const badges.BadgeAnimation.fade(
@@ -81,7 +83,7 @@ class _FooterServiceState extends State<FooterService> {
                       children: [
                         TextSpan(
                           text: CurrencyFormat.convertToIdr(
-                            cartController.totalPrice.value,
+                            _cartController.totalPrice.value,
                             0,
                           ),
                           style: const TextStyle(
@@ -101,17 +103,9 @@ class _FooterServiceState extends State<FooterService> {
               onPressed: () {
                 _isButtonDisabled
                     ? null
-                    : showModalBottomSheet(
-                      context: context,
-                      builder: (context) => const CheckoutPage(),
-                      isScrollControlled: true,
-                      backgroundColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
-                      ),
-                    );
+                    : _serviceController.category.value == 'Self Service'
+                    ? _cartController.saveCart(0)
+                    : Get.toNamed(RouterClass.checkoutPage);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

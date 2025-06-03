@@ -52,6 +52,7 @@ class DataTransaction {
   String? customerAddress;
   bool? completed;
   String? completedTime;
+  bool? karpet;
   List<DataTransactionDetails>? details;
 
   DataTransaction({
@@ -76,6 +77,7 @@ class DataTransaction {
     this.customerAddress,
     this.completed,
     this.completedTime,
+    this.karpet,
     this.details,
   });
 
@@ -101,6 +103,7 @@ class DataTransaction {
     customerAddress = json['customer_address'];
     completed = json['completed'];
     completedTime = json['completed_time'];
+    karpet = json['karpet'];
     if (json['details'] != null) {
       details = <DataTransactionDetails>[];
       json['details'].forEach((v) {
@@ -132,6 +135,7 @@ class DataTransaction {
     data['customer_address'] = customerAddress;
     data['completed'] = completed;
     data['completed_time'] = completedTime;
+    data['karpet'] = karpet;
     if (details != null) {
       data['details'] = details!.map((v) => v.toJson()).toList();
     }

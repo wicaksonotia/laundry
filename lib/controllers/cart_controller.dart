@@ -9,9 +9,14 @@ class CartController extends GetxController {
   final PrintNotaController _printNotaController = Get.put(
     PrintNotaController(),
   );
-  TextEditingController customerNameController = TextEditingController();
-  TextEditingController customerPhoneController = TextEditingController();
-  TextEditingController customerAddressController = TextEditingController();
+  // TextEditingController customerNameController = TextEditingController();
+  // TextEditingController customerPhoneController = TextEditingController();
+  // TextEditingController customerAddressController = TextEditingController();
+  var customerID = 0.obs;
+  var customerName = ''.obs;
+  var customerPhone = ''.obs;
+  var customerAddress = ''.obs;
+  TextEditingController catatanController = TextEditingController();
   TextEditingController discountController = TextEditingController();
   List<CartModel> cartList = <CartModel>[].obs;
   var isLoading = false.obs;
@@ -19,6 +24,7 @@ class CartController extends GetxController {
   RxDouble totalPrice = 0.0.obs;
   RxInt totalAllQuantity = 0.obs;
   var paymentStatus = false.obs;
+  var yaTidak = true.obs;
 
   void incrementProductQuantity(ServiceModel dataProduct) {
     if (cartList.where((element) => element.id == dataProduct.id).isNotEmpty) {
@@ -122,9 +128,9 @@ class CartController extends GetxController {
         'kios': kios,
         'discount': discount,
         'payment': paymentStatus.value,
-        'customer_name': customerNameController.text,
-        'customer_phone': customerPhoneController.text,
-        'customer_address': customerAddressController.text,
+        'customer_name': customerName.value,
+        'customer_phone': customerPhone.value,
+        'customer_address': customerAddress.value,
       };
       var resultSave = await RemoteDataSource.saveTransaction(
         dataTransaction,

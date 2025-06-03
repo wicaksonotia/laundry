@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:laundry/utils/colors.dart';
+import 'package:laundry/utils/sizes.dart';
 
 class TextFormFieldWidget extends StatelessWidget {
   const TextFormFieldWidget({
@@ -18,6 +20,8 @@ class TextFormFieldWidget extends StatelessWidget {
     this.initialValue,
     this.keyboardType = TextInputType.text,
     this.maxLines = 1,
+    this.height = 50,
+    this.inputFormatters,
   });
   final String hint;
   final IconData? prefixIcon;
@@ -29,6 +33,8 @@ class TextFormFieldWidget extends StatelessWidget {
   final String? initialValue;
   final TextInputType keyboardType;
   final int maxLines;
+  final double height;
+  final List<TextInputFormatter>? inputFormatters;
 
   final TextEditingController? controller;
   final Function()? onEditingComplete;
@@ -39,8 +45,9 @@ class TextFormFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
+      height: height,
       child: TextFormField(
+        inputFormatters: inputFormatters ?? const [],
         controller: controller,
         initialValue: initialValue,
         maxLines: maxLines,
@@ -53,37 +60,34 @@ class TextFormFieldWidget extends StatelessWidget {
         textCapitalization: TextCapitalization.characters,
         decoration: InputDecoration(
           labelText: hint,
+          labelStyle: const TextStyle(
+            fontFamily: "Inter",
+            fontSize: MySizes.fontSizeSm,
+          ),
+          hintStyle: TextStyle(
+            fontFamily: "Inter",
+            fontSize: MySizes.fontSizeSm,
+            color: Colors.grey[400],
+          ),
+          floatingLabelStyle: const TextStyle(color: MyColors.primary),
           contentPadding: const EdgeInsets.all(10),
           fillColor: Colors.white,
           border: OutlineInputBorder(
-            // borderRadius: BorderRadius.circular(10),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-            ),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Colors.grey[300]!, width: 0.0),
           ),
           enabledBorder: OutlineInputBorder(
-            // borderRadius: BorderRadius.circular(10),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-            ),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Colors.grey[300]!, width: 0.0),
           ),
           focusedBorder: OutlineInputBorder(
-            // borderRadius: BorderRadius.circular(10),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-            ),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Colors.grey[300]!, width: 0.0),
           ),
           // hintText: hint,
           // hintStyle: const TextStyle(
           //   fontFamily: "Inter",
-          //   fontSize: 16,
-          //   fontWeight: FontWeight.w500,
+          //   fontSize: MySizes.fontSizeSm,
           // ),
           prefixIcon:
               prefixIcon != null
@@ -92,7 +96,7 @@ class TextFormFieldWidget extends StatelessWidget {
           suffixIcon:
               suffixIcon != null
                   ? IconButton(
-                    icon: Icon(suffixIcon, color: MyColors.primary, size: 25),
+                    icon: Icon(suffixIcon, color: MyColors.primary, size: 15),
                     onPressed: onTapSuffixIcon,
                   )
                   : null,

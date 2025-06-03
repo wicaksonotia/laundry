@@ -1,8 +1,12 @@
-import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 import 'package:laundry/controllers/history_controller.dart';
+import 'package:laundry/controllers/service_controller.dart';
+import 'package:laundry/page/history/stepper_status.dart';
+import 'package:laundry/page/service/increment_and_decrement.dart';
+import 'package:laundry/page/service/product_price.dart';
+import 'package:laundry/utils/box_container.dart';
 import 'package:laundry/utils/colors.dart';
 import 'package:laundry/utils/currency.dart';
 import 'package:laundry/utils/sizes.dart';
@@ -22,19 +26,13 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  final List<String> steps = ['Antri', 'Proses', 'Selesai', 'Diambil'];
-  late int initialStep = 0;
+  final ServiceController _serviceController = Get.find<ServiceController>();
 
   @override
   void initState() {
     super.initState();
-    initialStep = 0;
-    if (widget.transaction.delivering == true) {
-      initialStep = 3;
-    } else if (widget.transaction.completed == true) {
-      initialStep = 2;
-    } else if (widget.transaction.washing == true) {
-      initialStep = 1;
+    if (widget.transaction.karpet == true) {
+      _serviceController.fetchProductKarpet();
     }
   }
 
@@ -100,6 +98,8 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                   ),
+
+                  // BUTTON BACK AND ORDER ID
                   Positioned(
                     top: 50,
                     left: 20,
@@ -136,9 +136,11 @@ class _DetailPageState extends State<DetailPage> {
                       ],
                     ),
                   ),
+
+                  // ORDER DETAIL
                   Container(
                     margin: const EdgeInsets.fromLTRB(20, 120, 20, 0),
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(15),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -220,274 +222,290 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                         Gap(10),
                         Divider(color: Colors.grey.shade300, thickness: 0.5),
-                        Gap(20),
-                        ...widget.transaction.details.map<Widget>((item) {
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 120,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+
+                        // TRANSACTION DETAILS
+                        ...(widget.transaction.karpet == true
+                            ? [
+                              Obx(() {
+                                if (_serviceController.isLoading.value) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                } else if (_serviceController
+                                    .servicesKarpet
+                                    .isEmpty) {
+                                  return const Center(
+                                    child: Text('No data found.'),
+                                  );
+                                } else {
+                                  return Column(
                                     children: [
-                                      Text(
-                                        item.serviceName,
-                                        style: TextStyle(
-                                          fontSize: MySizes.fontSizeMd,
-                                          fontWeight: FontWeight.bold,
+                                      ListView.builder(
+                                        padding: const EdgeInsets.fromLTRB(
+                                          10,
+                                          0,
+                                          10,
+                                          10,
                                         ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        'Rp ${CurrencyFormat.convertToIdr(item.unitPrice, 0)}',
-                                        style: TextStyle(
-                                          fontSize: MySizes.fontSizeSm,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
+                                        scrollDirection: Axis.vertical,
+                                        physics: const BouncingScrollPhysics(),
+                                        itemCount:
+                                            _serviceController
+                                                .servicesKarpet
+                                                .length,
+                                        shrinkWrap: true,
+                                        itemBuilder: (_, index) {
+                                          // var dataIdProduct = _serviceController.productItems[index].idProduct!;
+                                          var dataServiceName =
+                                              _serviceController
+                                                  .servicesKarpet[index]
+                                                  .serviceName!;
+                                          var dataPhoto =
+                                              _serviceController
+                                                  .servicesKarpet[index]
+                                                  .photo!;
+                                          var dataPrice =
+                                              _serviceController
+                                                  .servicesKarpet[index]
+                                                  .price!;
+                                          var dataSatuan =
+                                              _serviceController
+                                                  .servicesKarpet[index]
+                                                  .satuan!;
+
+                                          return BoxContainer(
+                                            margin: const EdgeInsets.only(
+                                              top: 10,
+                                            ),
+                                            padding: const EdgeInsets.all(5),
+                                            shadow: true,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                    right: 5,
+                                                  ),
+                                                  width: 80,
+                                                  height: 80,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                      image: MemoryImage(
+                                                        dataPhoto,
+                                                      ),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                          10,
+                                                        ),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          dataServiceName,
+                                                          style: const TextStyle(
+                                                            fontSize:
+                                                                MySizes
+                                                                    .fontSizeMd,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            ProductPrice(
+                                                              dataPrice:
+                                                                  dataPrice,
+                                                              dataSatuan:
+                                                                  dataSatuan,
+                                                            ),
+                                                            const Spacer(),
+                                                            IncrementAndDecrement(
+                                                              dataProduct:
+                                                                  _serviceController
+                                                                      .servicesKarpet[index],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ],
-                                  ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  width: 40,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'x${item.quantity.toString()}',
+                                  );
+                                }
+                              }),
+                            ]
+                            : [
+                              Gap(10),
+                              Column(
+                                children:
+                                    widget.transaction.details.map<Widget>((
+                                      item,
+                                    ) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(
+                                          bottom: 10,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 120,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    item.serviceName,
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          MySizes.fontSizeMd,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  Text(
+                                                    'Rp ${CurrencyFormat.convertToIdr(item.unitPrice, 0)}',
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          MySizes.fontSizeSm,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              width: 40,
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                'x${item.quantity.toString()}',
+                                                style: TextStyle(
+                                                  fontSize: MySizes.fontSizeMd,
+                                                ),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                'Rp ${CurrencyFormat.convertToIdr(item.totalPrice, 0)}',
+                                                style: TextStyle(
+                                                  fontSize: MySizes.fontSizeMd,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(),
+                              ),
+                              Gap(10),
+                              Divider(
+                                color: Colors.grey.shade300,
+                                thickness: 0.5,
+                              ),
+                              Gap(10),
+
+                              // SUBTOTAL
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Subtotal',
                                     style: TextStyle(
                                       fontSize: MySizes.fontSizeMd,
                                     ),
                                   ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    'Rp ${CurrencyFormat.convertToIdr(item.totalPrice, 0)}',
+                                  Text(
+                                    'Rp ${CurrencyFormat.convertToIdr(widget.transaction.total, 0)}',
                                     style: TextStyle(
                                       fontSize: MySizes.fontSizeMd,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                        Gap(10),
-                        Divider(color: Colors.grey.shade300, thickness: 0.5),
-                        Gap(10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Subtotal',
-                              style: TextStyle(fontSize: MySizes.fontSizeMd),
-                            ),
-                            Text(
-                              'Rp ${CurrencyFormat.convertToIdr(widget.transaction.total, 0)}',
-                              style: TextStyle(
-                                fontSize: MySizes.fontSizeMd,
-                                fontWeight: FontWeight.bold,
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        Gap(10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Discount',
-                              style: TextStyle(fontSize: MySizes.fontSizeMd),
-                            ),
-                            Text(
-                              'Rp ${CurrencyFormat.convertToIdr(widget.transaction.discount, 0)}',
-                              style: TextStyle(
-                                fontSize: MySizes.fontSizeMd,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Gap(10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Total',
-                              style: TextStyle(
-                                fontSize: MySizes.fontSizeLg,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Rp ${CurrencyFormat.convertToIdr(widget.transaction.grandTotal, 0)}',
-                              style: TextStyle(
-                                fontSize: MySizes.fontSizeLg,
-                                color: MyColors.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Gap(10),
-                        Divider(color: Colors.grey.shade300, thickness: 0.5),
-                        Gap(10),
-                        Center(
-                          child: Text(
-                            'Status',
-                            style: TextStyle(
-                              fontSize: MySizes.fontSizeMd,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        // Gap(10),
-                        // Row(
-                        //   children: [
-                        //     for (int i = 0; i < steps.length; i++)
-                        //       Container(
-                        //         width: 77.5,
-                        //         height: 70,
-                        //         margin: EdgeInsets.only(right: 5),
-                        //         padding: const EdgeInsets.symmetric(
-                        //           horizontal: 16,
-                        //           vertical: 8,
-                        //         ),
-                        //         decoration: BoxDecoration(
-                        //           color:
-                        //               initialStep == i
-                        //                   ? MyColors.primary
-                        //                   : Colors.grey.shade100,
-                        //           borderRadius:
-                        //               i == 0
-                        //                   ? BorderRadius.only(
-                        //                     topLeft: Radius.circular(20),
-                        //                     bottomLeft: Radius.circular(20),
-                        //                   )
-                        //                   : i == steps.length - 1
-                        //                   ? BorderRadius.only(
-                        //                     topRight: Radius.circular(20),
-                        //                     bottomRight: Radius.circular(20),
-                        //                   )
-                        //                   : BorderRadius.circular(0),
-                        //         ),
-                        //         child: Center(
-                        //           child: Text(
-                        //             steps[i],
-                        //             style: TextStyle(
-                        //               color:
-                        //                   initialStep == i
-                        //                       ? Colors.white
-                        //                       : Colors.black54,
-                        //               fontWeight: FontWeight.bold,
-                        //               fontSize: MySizes.fontSizeSm,
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //   ],
-                        // ),
-                        EasyStepper(
-                          padding: EdgeInsets.zero,
-                          activeStep: initialStep,
-                          lineStyle: const LineStyle(
-                            lineLength: 50,
-                            lineType: LineType.normal,
-                            lineThickness: 2,
-                            lineSpace: 1,
-                            lineWidth: 10,
-                            unreachedLineType: LineType.dashed,
-                            defaultLineColor: MyColors.primary,
-                            unreachedLineColor: MyColors.notionBgBlue,
-                          ),
-                          showLoadingAnimation: false,
-                          stepShape: StepShape.rRectangle,
-                          stepBorderRadius: 10,
-                          borderThickness: 2,
-                          stepRadius: 20,
-                          internalPadding: 0,
-                          showStepBorder: true,
-                          activeStepBackgroundColor: MyColors.primary,
-                          activeStepBorderColor: MyColors.primary,
-                          activeStepTextColor: Colors.white,
+                              Gap(10),
 
-                          finishedStepTextColor: Colors.white,
-                          finishedStepBorderColor: MyColors.primary,
-                          finishedStepBackgroundColor: MyColors.notionBgBlue,
-                          steps: [
-                            ...steps.asMap().entries.map((entry) {
-                              String label = entry.value;
-                              return EasyStep(
-                                customStep: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      if (entry.key > initialStep) {
-                                        initialStep = entry.key;
-                                        widget.historyController.updateStatus(
-                                          widget.transaction.id,
-                                          initialStep,
-                                        );
-                                        widget.historyController.fetchData();
-                                      }
-                                    });
-                                  },
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Container(
-                                      width: 40,
-                                      height: 40,
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        '${entry.key + 1}',
-                                        style: TextStyle(
-                                          color:
-                                              initialStep == entry.key
-                                                  ? Colors.white
-                                                  : Colors.black54,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                              // DISCOUNT
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Discount',
+                                    style: TextStyle(
+                                      fontSize: MySizes.fontSizeMd,
                                     ),
                                   ),
-                                ),
-                                customTitle: Text(
-                                  label,
-                                  textAlign: TextAlign.center,
-                                ),
-                              );
+                                  Text(
+                                    'Rp ${CurrencyFormat.convertToIdr(widget.transaction.discount, 0)}',
+                                    style: TextStyle(
+                                      fontSize: MySizes.fontSizeMd,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Gap(10),
 
-                              // EasyStep(
-                              //   customStep: CircleAvatar(
-                              //     backgroundColor:
-                              //         initialStep == idx
-                              //             ? Colors.red
-                              //             : MyColors.notionBgBlue,
-                              //     radius: 10,
-                              //   ),
-                              //   title: label,
-                              //   topTitle:
-                              //       idx % 2 ==
-                              //       1, // alternate top/bottom for visual variety
-                              // );
-                            }),
-                            // EasyStep(
-                            //   customStep: CircleAvatar(
-                            //     child: CircleAvatar(
-                            //       backgroundColor:
-                            //           initialStep == 0
-                            //               ? Colors.red
-                            //               : MyColors.notionBgBlue,
-                            //     ),
-                            //   ),
-                            //   title: 'Menunggu',
-                            // ),
-                          ],
-                        ),
+                              // TOTAL
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Total',
+                                    style: TextStyle(
+                                      fontSize: MySizes.fontSizeLg,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Rp ${CurrencyFormat.convertToIdr(widget.transaction.grandTotal, 0)}',
+                                    style: TextStyle(
+                                      fontSize: MySizes.fontSizeLg,
+                                      color: MyColors.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]),
+
+                        // STEPPER STATUS
+                        if (widget.transaction.customerName
+                                .toString()
+                                .toUpperCase() !=
+                            'SELF SERVICE') ...[
+                          Divider(color: Colors.grey.shade300, thickness: 0.5),
+                          Gap(10),
+                          StepperStatus(
+                            transaction: widget.transaction,
+                            historyController: widget.historyController,
+                          ),
+                        ],
                       ],
                     ),
                   ),

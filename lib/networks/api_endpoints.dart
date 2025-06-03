@@ -7,6 +7,7 @@ class _AuthEndPoints {
   final String login = 'loginkios';
   final String categories = 'categories';
   final String services = 'services';
+  final String customers = 'getcustomerlist';
   final String saveTransaction = 'savetransaction';
   final String getListTransaction = 'getlisttransaction';
   final String getRowTransaction = 'getrowtransaction';

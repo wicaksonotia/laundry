@@ -16,3 +16,8 @@ List<Map<String, String>> filterStatus = [
   {"value": "completed", "nama": "Selesai"},
   {"value": "delivered", "nama": "Sudah Diambil"},
 ];
+
+List<Map<String, dynamic>> yaTidak = [
+  {"value": true, "nama": "Ya"},
+  {"value": false, "nama": "Tidak"},
+];

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:laundry/models/category_model.dart';
+import 'package:laundry/models/customer_model.dart';
 import 'package:laundry/models/service_model.dart';
 import 'package:laundry/models/transaction_model.dart';
 import 'package:laundry/models/transaction_detail_model.dart';
@@ -233,6 +234,25 @@ class RemoteDataSource {
       if (response.statusCode == 200) {
         final TransactionModel res = TransactionModel.fromJson(response.data);
         return res;
+      }
+      return null;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  // GET CUSTOMER LIST
+  static Future<CustomerModel?> getCustomers(searchText) async {
+    try {
+      var rawFormat = jsonEncode({'searchText': searchText});
+      var url = ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.customers;
+      final response = await Dio().post(
+        url,
+        data: rawFormat,
+        options: Options(contentType: Headers.jsonContentType),
+      );
+      if (response.statusCode == 200) {
+        return CustomerModel.fromJson(response.data);
       }
       return null;
     } catch (e) {

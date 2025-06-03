@@ -4,8 +4,10 @@ import 'package:laundry/networks/api_request.dart';
 
 class ServiceController extends GetxController {
   var services = <ServiceModel>[].obs;
+  var servicesKarpet = <ServiceModel>[].obs;
   var category = 'Self Service'.obs;
   var isLoading = true.obs;
+  var isLoadingKarpet = true.obs;
 
   @override
   void onInit() {
@@ -22,6 +24,18 @@ class ServiceController extends GetxController {
       }
     } finally {
       isLoading(false);
+    }
+  }
+
+  void fetchProductKarpet() async {
+    try {
+      isLoadingKarpet(true);
+      var result = await RemoteDataSource.getServices('Karpet');
+      if (result != null) {
+        servicesKarpet.assignAll(result);
+      }
+    } finally {
+      isLoadingKarpet(false);
     }
   }
 }

@@ -22,7 +22,7 @@ class ServiceListView extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                 scrollDirection: Axis.vertical,
                 physics: const BouncingScrollPhysics(),
-                itemCount: _serviceController.services.length,
+                itemCount: 3,
                 shrinkWrap: true,
                 itemBuilder: (_, index) {
                   return BoxContainer(
@@ -106,9 +106,9 @@ class ServiceListView extends StatelessWidget {
                 shrinkWrap: true,
                 itemBuilder: (_, index) {
                   // var dataIdProduct = _serviceController.productItems[index].idProduct!;
-                  var _dataServiceName =
+                  var dataServiceName =
                       _serviceController.services[index].serviceName!;
-                  var _dataPhoto = _serviceController.services[index].photo!;
+                  var dataPhoto = _serviceController.services[index].photo!;
                   var dataPrice = _serviceController.services[index].price!;
                   var dataSatuan = _serviceController.services[index].satuan!;
 
@@ -125,7 +125,7 @@ class ServiceListView extends StatelessWidget {
                           height: 80,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: MemoryImage(_dataPhoto),
+                              image: MemoryImage(dataPhoto),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -137,7 +137,7 @@ class ServiceListView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  _dataServiceName,
+                                  dataServiceName,
                                   style: const TextStyle(
                                     fontSize: MySizes.fontSizeMd,
                                     fontWeight: FontWeight.bold,
